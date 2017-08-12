@@ -17,9 +17,9 @@ const DefaultTabBar = React.createClass({
     activeTextColor: React.PropTypes.string,
     inactiveTextColor: React.PropTypes.string,
     textStyle: Text.propTypes.style,
-    tabStyle: ViewPropTypes.style,
+    tabStyle: View.propTypes.style,
     renderTab: React.PropTypes.func,
-    underlineStyle: ViewPropTypes.style,
+    underlineStyle: View.propTypes.style,
   },
 
   getDefaultProps() {
@@ -39,7 +39,7 @@ const DefaultTabBar = React.createClass({
     const fontWeight = isTabActive ? 'bold' : 'normal';
 
     return <Button
-      style={styles.flexOne}
+      style={{flex: 1, }}
       key={name}
       accessible={true}
       accessibilityLabel={name}
@@ -65,8 +65,9 @@ const DefaultTabBar = React.createClass({
       bottom: 0,
     };
 
-    const left = this.props.scrollValue.interpolate({
-      inputRange: [0, 1, ], outputRange: [0,  containerWidth / numberOfTabs, ],
+    const translateX = this.props.scrollValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0,  containerWidth / numberOfTabs],
     });
     return (
       <View style={[styles.tabs, {backgroundColor: this.props.backgroundColor, }, this.props.style, ]}>
@@ -75,7 +76,17 @@ const DefaultTabBar = React.createClass({
           const renderTab = this.props.renderTab || this.renderTab;
           return renderTab(name, page, isTabActive, this.props.goToPage);
         })}
-        <Animated.View style={[tabUnderlineStyle, { left, }, this.props.underlineStyle, ]} />
+        <Animated.View
+          style={[
+            tabUnderlineStyle,
+            {
+              transform: [
+                { translateX },
+              ]
+            },
+            this.props.underlineStyle,
+          ]}
+        />
       </View>
     );
   },
@@ -87,9 +98,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingBottom: 10,
-  },
-  flexOne: {
-    flex: 1,
   },
   tabs: {
     height: 50,

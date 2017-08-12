@@ -8,7 +8,6 @@ const {
   Text,
   Platform,
   Dimensions,
-  I18nManager
 } = ReactNative;
 const Button = require('./Button');
 
@@ -23,12 +22,12 @@ const ScrollableTabBar = React.createClass({
     activeTextColor: React.PropTypes.string,
     inactiveTextColor: React.PropTypes.string,
     scrollOffset: React.PropTypes.number,
-    style: ViewPropTypes.style,
-    tabStyle: ViewPropTypes.style,
-    tabsContainerStyle: ViewPropTypes.style,
+    style: View.propTypes.style,
+    tabStyle: View.propTypes.style,
+    tabsContainerStyle: View.propTypes.style,
     textStyle: Text.propTypes.style,
     renderTab: React.PropTypes.func,
-    underlineStyle: ViewPropTypes.style,
+    underlineStyle: View.propTypes.style,
     onScroll:React.PropTypes.func,
   },
 
@@ -137,7 +136,7 @@ const ScrollableTabBar = React.createClass({
       onLayout={onLayoutHandler}
     >
       <View style={[styles.tab, this.props.tabStyle, ]}>
-        <Text style={[{color: textColor, fontWeight, }, textStyle, ]}>
+        <Text style={[{color: textColor, }, textStyle, ]}>
           {name}
         </Text>
       </View>
@@ -153,29 +152,26 @@ const ScrollableTabBar = React.createClass({
   render() {
     const tabUnderlineStyle = {
       position: 'absolute',
-      height: 4,
+      height: 1,
       backgroundColor: 'navy',
       bottom: 0,
     };
 
-    const key = I18nManager.isRTL ? 'right' : 'left';
     const dynamicTabUnderline = {
-      [`${key}`]: this.state._leftTabUnderline,
-      width: this.state._widthTabUnderline
-    }
+      left: this.state._leftTabUnderline,
+      width: this.state._widthTabUnderline,
+    };
 
     return <View
       style={[styles.container, {backgroundColor: this.props.backgroundColor, }, this.props.style, ]}
       onLayout={this.onContainerLayout}
     >
       <ScrollView
-        automaticallyAdjustContentInsets={false}
         ref={(scrollView) => { this._scrollView = scrollView; }}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         directionalLockEnabled={true}
-        onScroll={this.props.onScroll}
         bounces={false}
         scrollsToTop={false}
       >
